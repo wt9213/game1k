@@ -58,7 +58,7 @@ const getTable = (sourceCode) => {
     return table;
 }
 
-function ys(sourceCode) {
+const compress = sourceCode => {
     let table = getTable(sourceCode);
     let tableStr = '';
     while (table.length > 0) {
@@ -130,6 +130,6 @@ r('状态_游戏结束_', 27);
 });
 
 
-s = ys(s);
+s = compress(s);
 fs.writeFileSync('index.js', s);
 console.log(s.length);
