@@ -71,29 +71,22 @@ onkeyup = (v, n, y, A) => {
 
 开始X = 0;
 开始Y = 0;
-移动 = false;
 ontouchstart = (v, n, y, A) => {
     v = v.touches[0];
     开始X = v.pageX;
     开始Y = v.pageY;
-    移动 = false;
     onkeydown({ keyCode: n });
 };
 
 ontouchmove = (v, n, y, A) => {
-    移动 = true;
     v.preventDefault();
     n = v.touches[0];
     x = n.pageX;
     y = n.pageY;
-    if (x - 开始X < -50) ontouchstart(v, 65);
-    if (x - 开始X > 50) ontouchstart(v, 68);
-    // if (y - 开始Y < -50) ontouchstart(v, 87);
-    if (y - 开始Y > 50) ontouchstart(v, 83);
-};
-
-ontouchend = (v, n, y, A) => {
-    if (移动 == false) ontouchstart(v, 87);
+    if (x - 开始X < -25) ontouchstart(v, 65);
+    if (x - 开始X > 25) ontouchstart(v, 68);
+    if (y - 开始Y < -25) ontouchstart(v, 87);
+    if (y - 开始Y > 25) ontouchstart(v, 83);
 };
 
 渲染 = (v, n, y, A) => { //时间
