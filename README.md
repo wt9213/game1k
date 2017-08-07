@@ -8,4 +8,6 @@
 
 玩到数字 `8` 过关
 
- [Play It Here](https://fc01.github.io/game1k)
+[Play It Here](https://fc01.github.io/game1k)
+
+[Play It Here  按住空格 时光倒流](https://fc01.github.io/2k.html)
