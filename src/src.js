@@ -84,6 +84,7 @@ ontouchend = (v, n, y, A) => {
 xxx = (v, n, y, A) => {
     onkeydown({ keyCode: v });
     开始X = NaN;
+    开始Y = NaN;
 };
 
 ontouchmove = (v, n, y, A) => {
@@ -93,7 +94,7 @@ ontouchmove = (v, n, y, A) => {
     y = n.pageY;
     if (x - 开始X < -50) xxx(65);
     if (x - 开始X > 50) xxx(68);
-    if (y - 开始Y < -100) { 开始X = NaN; 倒流 = !倒流; }
+    if (y - 开始Y < -100) { 开始X = NaN; 开始Y = NaN; 倒流 = !倒流; }
     if (y - 开始Y > 50) xxx(83);
 };
 
