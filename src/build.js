@@ -131,5 +131,5 @@ r('状态_游戏结束_', 27);
 
 
 s = compress(s);
-fs.writeFileSync('index.js', s);
+fs.writeFileSync('./../2k.js', s);
 console.log(s.length);
