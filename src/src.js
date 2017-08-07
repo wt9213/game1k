@@ -21,7 +21,7 @@ c.font = '40px Tahoma';
 // const 状态_游戏结束_ = 27;
 
 
-结束下落标记 = 现在时间 = 0;
+现在时间 = 0;
 出现方块x坐标 = 状态 = 1;
 地图 = new Array(54 + 1).fill(0);
 
@@ -71,33 +71,33 @@ onkeyup = (v, n, y, A) => {
 // ontouchend = (v, n, y, A) => { };
 
 渲染 = (v, n, y, A) => { //时间
+    requestAnimationFrame(渲染);
 
     c.fillStyle = 'rgba(0,0,0,0.2)';
     c.fillRect(0, 0, 300, 500);
 
 
     if (倒流 && 时光.length > 0) {
+        ffff = 0;
         obj = 时光.pop();
-        结束下落标记 = obj.结束下落标记;
         现在时间 = obj.现在时间;
         出现方块x坐标 = obj.出现方块x坐标;
         状态 = obj.状态;
         地图 = obj.地图;
     } else {
         现在时间++;
+        if (状态 == 状态_正常_ || 状态 == 状态_游戏结束_) {
+            ffff++;
+        } else {
+            ffff = 0;
+        }
         if (ffff < 10) {
             时光.push({
-                结束下落标记,
                 现在时间,
                 出现方块x坐标,
                 状态,
                 地图: JSON.parse(JSON.stringify(地图))
             });
-        }
-        if (状态 == 状态_正常_ || 状态 == 状态_游戏结束_) {
-            ffff++;
-        } else {
-            ffff = 0;
         }
     }
 
@@ -207,8 +207,6 @@ onkeyup = (v, n, y, A) => {
     状态 = 状态 < 0 ? 状态_正常_ :
         状态 == 状态_正常_ || 状态 == 状态_游戏结束_ ? 状态 :
             状态 == 状态_结束下落_ ? 结束下落标记 :
-                状态 == 状态_爆炸结束_ ? 状态_开始下落_ : 状态 + 1;
-
-    requestAnimationFrame(渲染)
+                状态 == 状态_爆炸结束_ ? 状态_开始下落_ : 状态 + 1
 };
 渲染()
