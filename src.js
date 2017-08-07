@@ -94,7 +94,7 @@ onkeyup = (v, n, y, A) => {
                 地图: JSON.parse(JSON.stringify(地图))
             });
         }
-        if (状态 == 状态_正常_) {
+        if (状态 == 状态_正常_ || 状态 == 状态_游戏结束_) {
             ffff++;
         } else {
             ffff = 0;
