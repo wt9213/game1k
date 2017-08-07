@@ -69,9 +69,25 @@ onkeyup = (v, n, y, A) => {
 };
 
 
-// ontouchstart = (v, n, y, A) => { };
-// ontouchmove = (v, n, y, A) => {  };
-// ontouchend = (v, n, y, A) => { };
+开始X = 0;
+开始Y = 0;
+ontouchstart = (v, n, y, A) => {
+    v = v.touches[0];
+    开始X = v.pageX;
+    开始Y = v.pageY;
+    onkeydown({ keyCode: n });
+};
+
+ontouchmove = (v, n, y, A) => {
+    v.preventDefault();
+    n = v.touches[0];
+    x = n.pageX;
+    y = n.pageY;
+    if (x - 开始X < -50) ontouchstart(v, 65);
+    if (x - 开始X > 50) ontouchstart(v, 68);
+    if (y - 开始Y < -50) ontouchstart(v, 87);
+    if (y - 开始Y > 50) ontouchstart(v, 83);
+};
 
 渲染 = (v, n, y, A) => { //时间
     requestAnimationFrame(渲染);
