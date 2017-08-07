@@ -69,13 +69,21 @@ onkeyup = (v, n, y, A) => {
 };
 
 
-开始X = 0;
-开始Y = 0;
+开始X = NaN;
+开始Y = NaN;
 ontouchstart = (v, n, y, A) => {
     v = v.touches[0];
     开始X = v.pageX;
     开始Y = v.pageY;
-    onkeydown({ keyCode: n });
+};
+
+ontouchend = (v, n, y, A) => {
+    if (!isNaN(开始X)) xxx(87);
+};
+
+xxx = (v, n, y, A) => {
+    onkeydown({ keyCode: v });
+    开始X = NaN;
 };
 
 ontouchmove = (v, n, y, A) => {
@@ -83,10 +91,10 @@ ontouchmove = (v, n, y, A) => {
     n = v.touches[0];
     x = n.pageX;
     y = n.pageY;
-    if (x - 开始X < -25) ontouchstart(v, 65);
-    if (x - 开始X > 25) ontouchstart(v, 68);
-    if (y - 开始Y < -25) ontouchstart(v, 87);
-    if (y - 开始Y > 25) ontouchstart(v, 83);
+    if (x - 开始X < -50) xxx(65);
+    if (x - 开始X > 50) xxx(68);
+    if (y - 开始Y < -100) { 开始X = NaN; 倒流 = !倒流; }
+    if (y - 开始Y > 50) xxx(83);
 };
 
 渲染 = (v, n, y, A) => { //时间
