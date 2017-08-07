@@ -77,7 +77,7 @@ onkeyup = (v, n, y, A) => {
 
 
     if (倒流 && 时光.length > 0) {
-        let obj = 时光.pop();
+        obj = 时光.pop();
         结束下落标记 = obj.结束下落标记;
         现在时间 = obj.现在时间;
         出现方块x坐标 = obj.出现方块x坐标;
