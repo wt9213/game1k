@@ -8,7 +8,7 @@
 
 玩到数字 `8` 过关
 
-#### 1KB 版本
+#### 1KB 版本 (不支持手机)
 [Play It Here](https://fc01.github.io/game1k)
 
 
