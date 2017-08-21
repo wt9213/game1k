@@ -1,152 +1,152 @@
 //start
-const 状态_左_ = -1
-const 状态_右_ = 0
-const 状态_开始_ = 1
-const 状态_正常_ = 2
+const STATUS_LEFT = -1
+const STATUS_RIGHT = 0
+const STATUS_START = 1
+const STATUS_NORMAL = 2
 
-const 状态_开始下落_ = 3
-const 状态_结束下落_ = 14//--> top 爆炸 end
+const STATUS_DOWN_START = 3
+const STATUS_DOWN_END = 14//--> top 爆炸 end
 
-const 状态_爆炸_ = 15
-const 状态_爆炸结束_ = 26//--> 开始下落
+const STATUS_BOOM_START = 15
+const STATUS_BOOM_END = 26//--> 开始下落
 
-const 状态_游戏结束_ = 27
+const STATUS_GAME_OVER = 27
 //end
 
 c = c.getContext('2d');
 c.font = '40px A';
 
-现在时间 = 倒流 = 计数器 = 0;
-出现方块x坐标 = 状态 = 1;
-地图 = [时光 = []];
+nowTime = timeReverses = timeCount = 0;
+newX = status = 1;
+gameMap = [timeArr = []];
 
-地图.length = 54;
-地图.fill(0);
+gameMap.length = 54;
+gameMap.fill(0);
 
-动画到 = (v, n, y, A) => ({
+tweenTo = (v, n, y, A) => ({
     ...v,
-    动画开始位置x: v.x,
-    动画开始位置y: v.y,
-    动画结束位置x: n,
-    动画结束位置y: y,
-    动画开始时间: 现在时间
+    startX: v.x,
+    startY: v.y,
+    endX: n,
+    endY: y,
+    startTime: nowTime
 });
 
 onkeydown = (v, n, y, A) => {
     ;
-    if (v.keyCode == 87) 倒流 = 1;
-    if (状态 == 状态_正常_ && !倒流) {
+    if (v.keyCode == 87) timeReverses = 1;
+    if (status == STATUS_NORMAL && !timeReverses) {
         ;
-        if (v.keyCode == 65 && 出现方块x坐标 && 出现方块x坐标--) 状态 = 状态_左_;
-        if (v.keyCode == 68 && 出现方块x坐标 < 3 && ++出现方块x坐标) 状态 = 状态_右_;
-        if (v.keyCode == 83) 状态 = 状态_开始下落_
+        if (v.keyCode == 65 && newX && newX--) status = STATUS_LEFT;
+        if (v.keyCode == 68 && newX < 3 && ++newX) status = STATUS_RIGHT;
+        if (v.keyCode == 83) status = STATUS_DOWN_START
     }
 };
 
 onkeyup = (v, n, y, A) => {
     ;
-    if (v.keyCode == 87) 倒流 = 0
+    if (v.keyCode == 87) timeReverses = 0
 };
 
 
-渲染 = (v, n, y, A) => {
-    requestAnimationFrame(渲染);
+render = (v, n, y, A) => {
+    requestAnimationFrame(render);
 
-    if (倒流 && 时光.length > 0) {
-        计数器 = 0;
-        v = 时光.pop();
-        现在时间 = v.现在时间;
-        出现方块x坐标 = v.出现方块x坐标;
-        状态 = v.状态;
-        地图 = v.地图
+    if (timeReverses && timeArr.length > 0) {
+        timeCount = 0;
+        v = timeArr.pop();
+        nowTime = v.nowTime;
+        newX = v.newX;
+        status = v.status;
+        gameMap = v.gameMap
     } else {
-        计数器 = 状态 == 状态_正常_ || 状态 == 状态_游戏结束_ ? 计数器 + 1 : 0;
-        计数器 < 11 && 时光.push({ 现在时间, 出现方块x坐标, 状态, 地图 });
-        现在时间++;
-        if (状态 < 状态_开始_)
-            地图 = 地图.map(
+        timeCount = status == STATUS_NORMAL || status == STATUS_GAME_OVER ? timeCount + 1 : 0;
+        timeCount < 11 && timeArr.push({ nowTime, newX, status, gameMap });
+        nowTime++;
+        if (status < STATUS_START)
+            gameMap = gameMap.map(
                 A = (v, n, y, A) =>
-                    n > 47 && (v = 状态 == 状态_左_ ? y[n + 1] : n == 48 ? 0 : y[n - 1]) ? 动画到(v, n % 6, 8) : v
+                    n > 47 && (v = status == STATUS_LEFT ? y[n + 1] : n == 48 ? 0 : y[n - 1]) ? tweenTo(v, n % 6, 8) : v
             );
 
-        if (状态 == 状态_开始_)
-            地图 = 地图.map(
+        if (status == STATUS_START)
+            gameMap = gameMap.map(
                 A = (v, n, y, A) =>
-                    n > 47 + 出现方块x坐标 && n < 51 + 出现方块x坐标 ? 动画到({ x: n % 6, y: 10, i: Math.random() > 0.5 ? 1 : 2 }, n % 6, 8) : v
+                    n > 47 + newX && n < 51 + newX ? tweenTo({ x: n % 6, y: 10, i: Math.random() > 0.5 ? 1 : 2 }, n % 6, 8) : v
             );
 
-        if (状态 == 状态_爆炸_)
-            地图 = 地图.map(
+        if (status == STATUS_BOOM_START)
+            gameMap = gameMap.map(
                 A = (v, n, y, A) =>
-                    v.到xy ? 动画到(v, v.到x, v.到y) : v
+                    v.toPoint ? tweenTo(v, v.toX, v.toY) : v
             );
 
-        if (状态 == 状态_爆炸结束_)
-            地图 = 地图.map(
+        if (status == STATUS_BOOM_END)
+            gameMap = gameMap.map(
                 A = (v, n, y, A) =>
-                    v.是结束 && !v.到xy ? { ...v, 是结束: 0, i: v.i + 1 } : v
+                    v.isOver && !v.toPoint ? { ...v, isOver: 0, i: v.i + 1 } : v
             );
 
-        if (状态 == 状态_开始下落_)
-            地图 = 地图.map(
+        if (status == STATUS_DOWN_START)
+            gameMap = gameMap.map(
                 A = (v, n, y, A) => (
                     x = n % 6,
-                    v = y.filter(A = (v, n, y, A) => v && !v.是结束 && n % 6 == x)[~~(n / 6)] //lazy
-                ) ? 动画到(v, x, ~~(n / 6)) : 0
+                    v = y.filter(A = (v, n, y, A) => v && !v.isOver && n % 6 == x)[~~(n / 6)] //lazy
+                ) ? tweenTo(v, x, ~~(n / 6)) : 0
 
             );
 
         //结束下落
-        结束下落标记 = 状态_开始_;
+        downEndTag = STATUS_START;
 
-        if (状态 == 状态_结束下落_) 地图.map(A = (v, n, y, A) => {
+        if (status == STATUS_DOWN_END) gameMap.map(A = (v, n, y, A) => {
             A = [6, 1, 7, - 5];
             for (i = 0; i < (n % 6 == 0 || n % 6 == 5 ? 1 : 4); i++) {
-                a = 地图[A[i] + n];
-                b = 地图[- A[i] + n];
+                a = gameMap[A[i] + n];
+                b = gameMap[- A[i] + n];
                 if (a && b && a.i == v.i && b.i == v.i) {
-                    结束下落标记 = 状态_爆炸_;
-                    v.是结束 = 1;
-                    v.到xy = 0;
+                    downEndTag = STATUS_BOOM_START;
+                    v.isOver = 1;
+                    v.toPoint = 0;
 
                     v = a;
-                    if (!v.是结束) {
-                        v.到xy = v.是结束 = 1;
-                        v.到x = n % 6;
-                        v.到y = ~~(n / 6)
+                    if (!v.isOver) {
+                        v.toPoint = v.isOver = 1;
+                        v.toX = n % 6;
+                        v.toY = ~~(n / 6)
                     }
 
                     v = b;
-                    if (!v.是结束) {
-                        v.到xy = v.是结束 = 1;
-                        v.到x = n % 6;
-                        v.到y = ~~(n / 6)
+                    if (!v.isOver) {
+                        v.toPoint = v.isOver = 1;
+                        v.toX = n % 6;
+                        v.toY = ~~(n / 6)
                     }
                 }
             }
             ;
-            if (v && n > 47 && 结束下落标记 == 状态_开始_)
-                结束下落标记 = 状态_游戏结束_
+            if (v && n > 47 && downEndTag == STATUS_START)
+                downEndTag = STATUS_GAME_OVER
         });
 
         //动画  
-        地图 = 地图.map(A = (v, n, y, A) =>
+        gameMap = gameMap.map(A = (v, n, y, A) =>
             v ? (
-                A = (现在时间 - v.动画开始时间) / 11,
+                A = (nowTime - v.startTime) / 11,
                 A = (A > 1) ? 1 : A,
                 v = {
                     ...v,
-                    x: - v.动画开始位置x * A + v.动画结束位置x * A + v.动画开始位置x,
-                    y: - v.动画开始位置y * A + v.动画结束位置y * A + v.动画开始位置y
+                    x: - v.startX * A + v.endX * A + v.startX,
+                    y: - v.startY * A + v.endY * A + v.startY
                 },
                 v
             ) : 0
         );
 
-        状态 = 状态 == 状态_正常_ || 状态 == 状态_游戏结束_ ? 状态 :
-            状态 < 状态_开始_ ? 状态_正常_ :
-                状态 == 状态_结束下落_ ? 结束下落标记 :
-                    状态 == 状态_爆炸结束_ ? 状态_开始下落_ : 状态 + 1
+        status = status == STATUS_NORMAL || status == STATUS_GAME_OVER ? status :
+            status < STATUS_START ? STATUS_NORMAL :
+                status == STATUS_DOWN_END ? downEndTag :
+                    status == STATUS_BOOM_END ? STATUS_DOWN_START : status + 1
 
     }
 
@@ -155,7 +155,7 @@ onkeyup = (v, n, y, A) => {
     i = 0;
     c.fillStyle = 'hsla(' + i + ',40%,0%,0.2)';
     c.fillRect(0, 0, 300, 500);
-    地图.map(A = (v, n, y, A) => {
+    gameMap.map(A = (v, n, y, A) => {
         x = 50 * v.x;
         y = 450 - 50 * v.y;
         i = v.i * 35;
@@ -168,4 +168,4 @@ onkeyup = (v, n, y, A) => {
     });
 };
 
-渲染()
+render()

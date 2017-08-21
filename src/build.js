@@ -101,38 +101,38 @@ let ok = unesed.split('')
 
 let r = (a, b) => s = s.split(a).join(b)
 
-r('状态_左_', -1)
-r('状态_右_', 0)
+r('STATUS_LEFT', -1)
+r('STATUS_RIGHT', 0)
 
-r('状态_开始_', 1)
-r('状态_正常_', 2)
+r('STATUS_START', 1)
+r('STATUS_NORMAL', 2)
 
-r('状态_开始下落_', 3)
-r('状态_结束下落_', 14)//--> top 爆炸 end
+r('STATUS_DOWN_START', 3)
+r('STATUS_DOWN_END', 14)//--> top 爆炸 end
 
-r('状态_爆炸_', 15)
-r('状态_爆炸结束_', 26)//--> 开始下落
+r('STATUS_BOOM_START', 15)
+r('STATUS_BOOM_END', 26)//--> 开始下落
 
-r('状态_游戏结束_', 27)
+r('STATUS_GAME_OVER', 27)
 
 
 let abc = unesed.split('')
 
     ;[
-        '动画开始位置x', '动画开始位置y',
-        '动画结束位置x', '动画结束位置y',
-        '动画开始时间', '是结束',
-        '到xy', '到x', '到y'
+        'startX', 'startY',
+        'endX', 'endY',
+        'startTime', 'isOver',
+        'toPoint', 'toX', 'toY'
     ].forEach(v => {
         s = s.split(v).join(abc.pop())
     })
 
     //关键词
     ;[
-        '结束下落标记',
-        '状态', '现在时间', '出现方块x坐标',
-        '地图', '动画到',
-        '渲染', '时光', '倒流', '计数器'
+        'downEndTag',
+        'status', 'nowTime', 'newX',
+        'gameMap', 'tweenTo',
+        'render', 'timeArr', 'timeReverses', 'timeCount'
     ].forEach(v => {
         s = s.split(v).join(ok.pop())
     })
